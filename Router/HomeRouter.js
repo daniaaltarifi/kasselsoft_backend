@@ -34,10 +34,13 @@ const upload = multer({
   }
 });
 
-router.post('/add/:lang',upload.fields([{ name: 'value', maxCount: 1 }]), HomeController.addHome);
-router.get('/:lang', HomeController.getHomeByLang)
-router.get('/', HomeController.getHome)
-router.put('/update/:lang/:id',upload.fields([{ name: 'value', maxCount: 1 }]), HomeController.updateHome);
+
+router.post('/add/:lang',upload.fields([{ name: 'img', maxCount: 1 }]), HomeController.addmainhome);
+router.get('/:lang', HomeController.getmainhomeByLang)
+router.get('/getbyid/:id', HomeController.getmainhomeById)
+
+router.get('/', HomeController.getmainhome)
+router.put('/update/:lang/:id',upload.fields([{ name: 'img', maxCount: 1 }]), HomeController.updatemainhome);
 
 
 module.exports =router

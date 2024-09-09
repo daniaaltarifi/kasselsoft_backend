@@ -1,6 +1,6 @@
 const express = require('express');
 const router= express.Router();
-const CardHomeController = require('../Controller/CardHomeController.js');
+const ServicesController = require('../Controller/ServicesController.js');
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
@@ -34,12 +34,11 @@ const upload = multer({
   }
 });
 
-router.post('/add/:lang',upload.fields([{ name: 'icon', maxCount: 1 }]), CardHomeController.addCardHome);
-router.get('/:lang', CardHomeController.getCardHomeByLang)
-router.get('/getbyid/:id', CardHomeController.getCardhomeById)
-
-router.get('/', CardHomeController.getCardHome)
-router.put('/update/:lang/:id',upload.fields([{ name: 'icon', maxCount: 1 }]), CardHomeController.updateCardHome);
+router.post('/add/:lang',upload.fields([{ name: 'img', maxCount: 1 }]), ServicesController.addservices);
+router.get('/:lang', ServicesController.getservicesByLang)
+router.get('/getbyid/:id', ServicesController.getservicesById)
+router.get('/', ServicesController.getservices)
+router.put('/update/:lang/:id',upload.fields([{ name: 'img', maxCount: 1 }]), ServicesController.updateservices);
 
 
 module.exports =router

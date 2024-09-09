@@ -5,6 +5,8 @@ const WhyChooseusController = require('../Controller/WhyChooseusController.js');
 
 router.post('/add/:lang', WhyChooseusController.addWhychooseus);
 router.get('/:lang', WhyChooseusController.getWhychooseusByLang)
+router.get('/getbyid/:id', WhyChooseusController.getwhychooseusshomeById)
+
 router.get('/', WhyChooseusController.getWhychooseus)
 router.put('/update/:lang/:id', WhyChooseusController.updateWhychooseus);
 
