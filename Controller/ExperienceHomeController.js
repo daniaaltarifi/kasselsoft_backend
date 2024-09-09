@@ -2,8 +2,8 @@ const db = require("../config.js");
 const fs = require("fs");
 const path = require("path");
 
-// Updated addserviceshome function
-const addserviceshome = async (req, res) => {
+// Updated addexperiencehome function
+const addexperiencehome = async (req, res) => {
   const { lang } = req.params;
   const { title,description } = req.body;
   const img =
@@ -13,7 +13,7 @@ const addserviceshome = async (req, res) => {
   }
 
   const query =
-    "INSERT INTO serviceshome (lang, title, description, img) VALUES (?, ?, ?, ?)";
+    "INSERT INTO experiencehome (lang, title, description, img) VALUES (?, ?, ?, ?)";
 
   db.query(query, [lang, title,description, img], (error, results) => {
     if (error) {
@@ -22,15 +22,15 @@ const addserviceshome = async (req, res) => {
     }
 
     res.json({
-      message: "serviceshome added successfully",
+      message: "experiencehome added successfully",
       insertId: results.insertId,
     });
   });
 };
 
-const getserviceshomeByLang = (req, res) => {
+const getexperiencehomeByLang = (req, res) => {
   const { lang } = req.params;
-  const sqlSelect = "SELECT * FROM serviceshome WHERE lang = ?";
+  const sqlSelect = "SELECT * FROM experiencehome WHERE lang = ?";
   db.query(sqlSelect, [lang], (err, result) => {
     if (err) {
       return res.json({ message: err.message });
@@ -38,14 +38,14 @@ const getserviceshomeByLang = (req, res) => {
     res.status(200).json(result);
   });
 };
-const updateserviceshome = (req, res) => {
+const updateexperiencehome = (req, res) => {
     const { lang, id } = req.params;
     const { title, description } = req.body;
     const img =
       req.files && req.files["img"] ? req.files["img"][0].filename : null;
   
     // First, retrieve the current values
-    const sqlSelect = "SELECT title, description, img FROM serviceshome WHERE lang = ? AND id = ?";
+    const sqlSelect = "SELECT title, description, img FROM experiencehome WHERE lang = ? AND id = ?";
     
     db.query(sqlSelect, [lang, id], (err, results) => {
       if (err) {
@@ -66,7 +66,7 @@ const updateserviceshome = (req, res) => {
       const updatedImg = img !== null ? img : existing.img;
   
       // Construct the update SQL query
-      const sqlUpdate = "UPDATE serviceshome SET title = ?, description = ?, img = ? WHERE lang = ? AND id = ?";
+      const sqlUpdate = "UPDATE experiencehome SET title = ?, description = ?, img = ? WHERE lang = ? AND id = ?";
       
       db.query(sqlUpdate, [updatedTitle, updatedDescription, updatedImg, lang, id], (err, result) => {
         if (err) {
@@ -78,13 +78,14 @@ const updateserviceshome = (req, res) => {
           return res.status(404).json({ message: "No matching record found to update" });
         }
   
-        res.status(200).json({ message: "serviceshome updated successfully" });
+        res.status(200).json({ message: "experiencehome updated successfully" });
       });
     });
   };
+  
 
-const getserviceshome = (req, res) => {
-  const sqlSelect = "SELECT * FROM serviceshome";
+const getexperiencehome = (req, res) => {
+  const sqlSelect = "SELECT * FROM experiencehome";
   db.query(sqlSelect, (err, result) => {
     if (err) {
       return res.json({ message: err.message });
@@ -92,9 +93,9 @@ const getserviceshome = (req, res) => {
     res.status(200).json(result);
   });
 };
-const getserviceshomeById = (req, res) => {
+const getexperiencehomeById = (req, res) => {
     const { id } = req.params;
-    const sqlSelect = "SELECT * FROM serviceshome WHERE id = ?";
+    const sqlSelect = "SELECT * FROM experiencehome WHERE id = ?";
     db.query(sqlSelect, [id], (err, result) => {
       if (err) {
         return res.json({ message: err.message });
@@ -102,4 +103,4 @@ const getserviceshomeById = (req, res) => {
       res.status(200).json(result);
     });
   };
-module.exports = { getserviceshomeByLang, addserviceshome, updateserviceshome,getserviceshome,getserviceshomeById };
+module.exports = { getexperiencehomeByLang, addexperiencehome, updateexperiencehome,getexperiencehome,getexperiencehomeById };

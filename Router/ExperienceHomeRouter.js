@@ -1,6 +1,6 @@
 const express = require('express');
 const router= express.Router();
-const CardHomeController = require('../Controller/CardHomeController.js');
+const ExperienceHomeController = require('../Controller/ExperienceHomeController.js');
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
@@ -34,12 +34,11 @@ const upload = multer({
   }
 });
 
-router.post('/add/:lang',upload.fields([{ name: 'icon', maxCount: 1 }]), CardHomeController.addCardHome);
-router.get('/:lang', CardHomeController.getCardHomeByLang)
-router.get('/getbyid/:id', CardHomeController.getCardhomeById)
-
-router.get('/', CardHomeController.getCardHome)
-router.put('/update/:lang/:id',upload.fields([{ name: 'icon', maxCount: 1 }]), CardHomeController.updateCardHome);
+router.post('/add/:lang',upload.fields([{ name: 'img', maxCount: 1 }]), ExperienceHomeController.addexperiencehome);
+router.get('/:lang', ExperienceHomeController.getexperiencehomeByLang)
+router.get('/getbyid/:id', ExperienceHomeController.getexperiencehomeById)
+router.get('/', ExperienceHomeController.getexperiencehome)
+router.put('/update/:lang/:id',upload.fields([{ name: 'img', maxCount: 1 }]), ExperienceHomeController.updateexperiencehome);
 
 
 module.exports =router

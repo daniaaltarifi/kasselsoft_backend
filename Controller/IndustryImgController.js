@@ -2,16 +2,16 @@ const db = require("../config.js");
 const fs = require("fs");
 const path = require("path");
 
-// Updated addImgSliderHome function
-const addImgSliderHome = async (req, res) => {
+// Updated addindustryimg function
+const addindustryimg = async (req, res) => {
   const img =
-    req.files && req.files["slider"] ? req.files["slider"][0].filename : null;
+    req.files && req.files["img"] ? req.files["img"][0].filename : null;
   if (!img) {
     return res.status(400).json({ error: "Missing required fields" });
   }
  
   const query =
-    "INSERT INTO imgsliderhome (img) VALUES (?)";
+    "INSERT INTO industryimg (img) VALUES (?)";
 
   db.query(query, [img], (error, results) => {
     if (error) {
@@ -20,18 +20,18 @@ const addImgSliderHome = async (req, res) => {
     }
 
     res.json({
-      message: "slider img added successfully",
+      message: " img added successfully",
       insertId: results.insertId,
     });
   });
 };
 
 
-const updateImgSliderHome = (req, res) => {
+const updateindustryimg = (req, res) => {
   const {  id } = req.params;
   const img =
-    req.files && req.files["slider"] ? req.files["slider"][0].filename : null;
-    const sqlSelect = "SELECT img FROM imgsliderhome WHERE id = ?";
+    req.files && req.files["img"] ? req.files["img"][0].filename : null;
+    const sqlSelect = "SELECT img FROM industryimg WHERE id = ?";
     
     db.query(sqlSelect, [id], (err, results) => {
       if (err) {
@@ -50,7 +50,7 @@ const updateImgSliderHome = (req, res) => {
       
       const updatedImg = img !== null ? img : existing.img;
     const sqlUpdate =
-    "UPDATE imgsliderhome SET img = ? WHERE id = ? ";
+    "UPDATE industryimg SET img = ? WHERE id = ? ";
   
   db.query(sqlUpdate, [updatedImg, id], (err, result) => {
     if (err) {
@@ -62,12 +62,12 @@ const updateImgSliderHome = (req, res) => {
       return res.status(404).json({ message: "No matching record found to update" });
     }
   
-    res.status(200).json({ message: "slider updated successfully" });
+    res.status(200).json({ message: "img updated successfully" });
   });
 })
 };
-const getImgSliderHome = (req, res) => {
-  const sqlSelect = "SELECT * FROM imgsliderhome";
+const getindustryimg = (req, res) => {
+  const sqlSelect = "SELECT * FROM industryimg";
   db.query(sqlSelect, (err, result) => {
     if (err) {
       return res.json({ message: err.message });
@@ -75,9 +75,9 @@ const getImgSliderHome = (req, res) => {
     res.status(200).json(result);
   });
 };
-const getImgSliderHomeById = (req, res) => {
+const getindustryimgById = (req, res) => {
   const { id } = req.params;
-  const sqlSelect = "SELECT * FROM imgsliderhome WHERE id = ?";
+  const sqlSelect = "SELECT * FROM industryimg WHERE id = ?";
   db.query(sqlSelect, [id], (err, result) => {
     if (err) {
       return res.json({ message: err.message });
@@ -85,4 +85,4 @@ const getImgSliderHomeById = (req, res) => {
     res.status(200).json(result);
   });
 };
-module.exports = { addImgSliderHome, updateImgSliderHome,getImgSliderHome,getImgSliderHomeById };
+module.exports = { addindustryimg, updateindustryimg,getindustryimg,getindustryimgById };

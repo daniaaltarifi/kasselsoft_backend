@@ -35,8 +35,9 @@ const upload = multer({
 });
 
 router.post('/add',upload.fields([{ name: 'slider', maxCount: 1 }]), ImgSliderHomeController.addImgSliderHome);
-// router.get('/:lang', ImgSliderHomeController.getImgSliderHomeByLang)
 router.get('/', ImgSliderHomeController.getImgSliderHome)
+router.get('/getbyid/:id', ImgSliderHomeController.getImgSliderHomeById)
+
 router.put('/update/:id',upload.fields([{ name: 'slider', maxCount: 1 }]), ImgSliderHomeController.updateImgSliderHome);
 
 
