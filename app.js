@@ -24,9 +24,11 @@ const TermsAndConditionsRouter = require("./Router/TermsAndConditionsRouter.js")
 const BackgroundPathRouter = require("./Router/BackgroundPathRouter.js");
 const FooterRouter = require("./Router/FooterRouter.js");
 const ContactFooterRouter = require("./Router/ContactFooterRouter.js");
+const PositionRouter = require("./Router/PositionRouter.js");
+const CareerFormRouter = require("./Router/CareerFormRouter.js");
+const CareersRouter = require("./Router/CareersRouter.js");
 const AbuteTeamRouter = require("./Router/AbuteTeamRouter.js");
 const aboutServicesRouter = require("./Router/AbuteServicesRouter.js");
-
 const app = express();
 const PORT = process.env.PORT || 3005;
 app.use(express.json());
@@ -49,6 +51,11 @@ app.use("/termsandconditions", TermsAndConditionsRouter);
 app.use("/backgroundpath", BackgroundPathRouter);
 app.use("/footer", FooterRouter);
 app.use("/contactfooter", ContactFooterRouter);
+app.use("/position", PositionRouter);
+app.use("/careerform", CareerFormRouter);
+app.use("/careers", CareersRouter);
+
+
 app.use("/api", AbuteRouter);
 app.use("/abuteteam", AbuteTeamRouter);
 app.use("/aboutServices", aboutServicesRouter);
