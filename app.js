@@ -9,6 +9,7 @@ const fs = require("fs");
 dotenv.config();
 const db = require("./config.js");
 const HomeRouter = require("./Router/HomeRouter.js");
+const AbuteRouter = require("./Router/AbuteRouter.js");
 const HomeServicesRouter = require("./Router/HomeServicesRouter.js");
 const WhyChooseusRouter = require("./Router/WhyChooseusRouter.js");
 const CardHomeRouter = require("./Router/CardHomeRouter.js");
@@ -23,6 +24,9 @@ const TermsAndConditionsRouter = require("./Router/TermsAndConditionsRouter.js")
 const BackgroundPathRouter = require("./Router/BackgroundPathRouter.js");
 const FooterRouter = require("./Router/FooterRouter.js");
 const ContactFooterRouter = require("./Router/ContactFooterRouter.js");
+const AbuteTeamRouter = require("./Router/AbuteTeamRouter.js");
+const aboutServicesRouter = require("./Router/AbuteServicesRouter.js");
+
 const app = express();
 const PORT = process.env.PORT || 3005;
 app.use(express.json());
@@ -45,8 +49,9 @@ app.use("/termsandconditions", TermsAndConditionsRouter);
 app.use("/backgroundpath", BackgroundPathRouter);
 app.use("/footer", FooterRouter);
 app.use("/contactfooter", ContactFooterRouter);
-
-
+app.use("/api", AbuteRouter);
+app.use("/abuteteam", AbuteTeamRouter);
+app.use("/aboutServices", aboutServicesRouter);
 app.get("/", (req, res) => {
   res.send("Welcome to kasselsoft! ");
 });

@@ -101,6 +101,8 @@ const updatetermsandconditions = (req, res) => {
     Severability_title,
     Severability_description,
   } = req.body;
+
+  
   const img_Interpretation =
     req.files && req.files["img_Interpretation"]
       ? req.files["img_Interpretation"][0].filename

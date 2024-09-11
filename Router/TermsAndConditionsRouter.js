@@ -39,7 +39,8 @@ router.get('/:lang', TermsAndConditionController.gettermsandconditionsByLang)
 router.get('/:lang/:page_type', TermsAndConditionController.getTermsAndConditionsByPage)
 router.get('/getbyid/:id', TermsAndConditionController.gettermsandconditionsById)
 router.get('/', TermsAndConditionController.gettermsandconditions)
-router.put('/update/:lang/:id/:page_type',upload.fields([{ name: 'img_Interpretation', maxCount: 1 }, { name: 'Severability_img', maxCount: 1 }]), TermsAndConditionController.updatetermsandconditions);
+router.put('/update/:lang/:id/:page_type',upload.fields([{ 
+  name: 'img_Interpretation', maxCount: 1 }, { name: 'Severability_img', maxCount: 1 }]), TermsAndConditionController.updatetermsandconditions);
 
 // BLACK DATA
 router.post('/addblack/:lang/:page_type', TermsAndConditionController.addtermsblackdata);
