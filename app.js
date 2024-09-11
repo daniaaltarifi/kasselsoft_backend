@@ -9,6 +9,7 @@ const fs = require("fs");
 dotenv.config();
 const db = require("./config.js");
 const HomeRouter = require("./Router/HomeRouter.js");
+const AbuteRouter = require("./Router/AbuteRouter.js");
 const HomeServicesRouter = require("./Router/HomeServicesRouter.js");
 const WhyChooseusRouter = require("./Router/WhyChooseusRouter.js");
 const CardHomeRouter = require("./Router/CardHomeRouter.js");
@@ -26,6 +27,8 @@ const ContactFooterRouter = require("./Router/ContactFooterRouter.js");
 const PositionRouter = require("./Router/PositionRouter.js");
 const CareerFormRouter = require("./Router/CareerFormRouter.js");
 const CareersRouter = require("./Router/CareersRouter.js");
+const AbuteTeamRouter = require("./Router/AbuteTeamRouter.js");
+const aboutServicesRouter = require("./Router/AbuteServicesRouter.js");
 const app = express();
 const PORT = process.env.PORT || 3005;
 app.use(express.json());
@@ -53,6 +56,9 @@ app.use("/careerform", CareerFormRouter);
 app.use("/careers", CareersRouter);
 
 
+app.use("/api", AbuteRouter);
+app.use("/abuteteam", AbuteTeamRouter);
+app.use("/aboutServices", aboutServicesRouter);
 app.get("/", (req, res) => {
   res.send("Welcome to kasselsoft! ");
 });
