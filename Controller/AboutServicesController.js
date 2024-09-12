@@ -8,7 +8,7 @@ const createaboutServices = (req, res) => {
     const { lang } = req.params;
     const {  icon, title} = req.body;
     
-    const sqlInsert = "INSERT INTO aboutServices (lang, icon, title) VALUES (?,?,?)";
+    const sqlInsert = "INSERT INTO aboutservices (lang, icon, title) VALUES (?,?,?)";
     
     db.query(sqlInsert, [lang,  icon, title], (err, result) => {
         if (err) {
@@ -22,7 +22,7 @@ const createaboutServices = (req, res) => {
 
 const getaboutServicesByLang = (req, res) => {
     const { lang } = req.params;
-    const sqlSelect = "SELECT * FROM aboutServices WHERE lang = ?";
+    const sqlSelect = "SELECT * FROM aboutservices WHERE lang = ?";
     db.query(sqlSelect, [lang], (err, result) => {
         if (err) {
             return res.status(500).json({ message: err.message });
@@ -34,7 +34,7 @@ const getaboutServicesByLang = (req, res) => {
 
 
 const getAllaboutServices = (req, res) => {
-    const sqlSelect = "SELECT * FROM aboutServices";
+    const sqlSelect = "SELECT * FROM aboutservices";
     db.query(sqlSelect, (err, result) => {
         if (err) {
             return res.status(500).json({ message: err.message });
@@ -54,7 +54,7 @@ const updateaboutServices = (req, res) => {
     console.log("Body:", req.body);
 
     // Select existing data
-    const sqlSelect = "SELECT title, icon FROM aboutServices WHERE lang = ? AND id = ?";
+    const sqlSelect = "SELECT title, icon FROM aboutservices WHERE lang = ? AND id = ?";
 
     db.query(sqlSelect, [lang, id], (err, results) => {
         if (err) {
@@ -85,7 +85,7 @@ const updateaboutServices = (req, res) => {
         }
 
         // Update query
-        const sqlUpdate = "UPDATE aboutServices SET title = ?, icon = ? WHERE lang = ? AND id = ?";
+        const sqlUpdate = "UPDATE aboutservices SET title = ?, icon = ? WHERE lang = ? AND id = ?";
 
         db.query(
             sqlUpdate,
