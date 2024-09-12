@@ -31,6 +31,8 @@ const AbuteTeamRouter = require("./Router/AbuteTeamRouter.js");
 const aboutServicesRouter = require("./Router/AbuteServicesRouter.js");
 const TagsRouter = require("./Router/TagsRouter.js");
 const BlogsRouter = require("./Router/BlogsRouter.js");
+
+const ContactFormRouter = require("./Router/ContactFormRouter.js");
 const app = express();
 const PORT = process.env.PORT || 3005;
 app.use(express.json());
@@ -59,7 +61,7 @@ app.use("/careers", CareersRouter);
 app.use("/tags", TagsRouter);
 app.use("/blogs", BlogsRouter);
 
-
+app.use("/contactForm", ContactFormRouter);
 app.use("/api", AbuteRouter);
 app.use("/abuteteam", AbuteTeamRouter);
 app.use("/aboutServices", aboutServicesRouter);
