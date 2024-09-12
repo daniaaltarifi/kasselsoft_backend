@@ -29,6 +29,8 @@ const CareerFormRouter = require("./Router/CareerFormRouter.js");
 const CareersRouter = require("./Router/CareersRouter.js");
 const AbuteTeamRouter = require("./Router/AbuteTeamRouter.js");
 const aboutServicesRouter = require("./Router/AbuteServicesRouter.js");
+const TagsRouter = require("./Router/TagsRouter.js");
+const BlogsRouter = require("./Router/BlogsRouter.js");
 const app = express();
 const PORT = process.env.PORT || 3005;
 app.use(express.json());
@@ -54,6 +56,8 @@ app.use("/contactfooter", ContactFooterRouter);
 app.use("/position", PositionRouter);
 app.use("/careerform", CareerFormRouter);
 app.use("/careers", CareersRouter);
+app.use("/tags", TagsRouter);
+app.use("/blogs", BlogsRouter);
 
 
 app.use("/api", AbuteRouter);
