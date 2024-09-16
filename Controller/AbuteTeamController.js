@@ -111,9 +111,54 @@ const getAllAboutTeme = (req, res) => {
     });
 };
 
+const getAboutTemeById = (req, res) => {
+    const { id } = req.params; // Get the id from the route parameters
+
+    const sqlSelect = "SELECT * FROM aboutteme WHERE id = ?";
+
+    db.query(sqlSelect, [id], (err, result) => {
+        if (err) {
+            return res.status(500).json({ message: err.message });
+        }
+        if (result.length === 0) {
+            return res.status(404).json({ message: "Record not found" });
+        }
+        res.status(200).json(result[0]); // Return the found record
+    });
+};
+
+
+// Delete team member by ID
+const deleteAboutTeme = (req, res) => {
+    const { id } = req.params; // Get the id from the URL parameter
+
+    // SQL query to delete the record by id
+    const sqlDelete = "DELETE FROM aboutteme WHERE id = ?";
+
+    db.query(sqlDelete, [id], (err, result) => {
+        if (err) {
+            return res.status(500).json({ message: "Error deleting the record", error: err.message });
+        }
+
+        // If no rows were affected, it means the ID was not found
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Record not found" });
+        }
+
+        // Successful deletion
+        res.status(200).json({ message: "Record deleted successfully" });
+    });
+};
+
+
+
+
+
 module.exports = {
     getAboutTemeByLang,
     updateAboutTeme,
     createAboutTeme,
-    getAllAboutTeme
+    getAllAboutTeme,
+    getAboutTemeById,
+    deleteAboutTeme
 };
