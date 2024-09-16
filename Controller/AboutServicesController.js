@@ -126,6 +126,23 @@ const updateaboutServices = (req, res) => {
         );
     });
 };
+// Assuming you have a file like `aboutServicesController.js`
+
+const deleteAboutServiceById = (req, res) => {
+    const { id } = req.params; // Retrieve the ID from request parameters
+
+    const sqlDelete = "DELETE FROM aboutservices WHERE id = ?";
+
+    db.query(sqlDelete, [id], (err, result) => {
+        if (err) {
+            return res.status(500).json({ message: err.message });
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Record not found" });
+        }
+        res.status(200).json({ message: "Record deleted successfully" });
+    });
+};
 
 
 module.exports = {
@@ -133,5 +150,6 @@ module.exports = {
     getaboutServicesByLang,
     getAllaboutServices,
     updateaboutServices,
-    getAboutServiceById
+    getAboutServiceById,
+    deleteAboutServiceById
 };
