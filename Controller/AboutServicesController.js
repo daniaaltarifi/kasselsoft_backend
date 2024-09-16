@@ -18,6 +18,23 @@ const createaboutServices = (req, res) => {
     });
 };
 
+// Assuming you have a file like `aboutServicesController.js`
+
+const getAboutServiceById = (req, res) => {
+    const { id } = req.params; // Retrieve the ID from request parameters
+
+    const sqlQuery = "SELECT * FROM aboutservices WHERE id = ?";
+
+    db.query(sqlQuery, [id], (err, result) => {
+        if (err) {
+            return res.status(500).json({ message: err.message });
+        }
+        if (result.length === 0) {
+            return res.status(404).json({ message: "Record not found" });
+        }
+        res.status(200).json(result[0]); // Return the record
+    });
+};
 
 
 const getaboutServicesByLang = (req, res) => {
@@ -115,5 +132,6 @@ module.exports = {
     createaboutServices,
     getaboutServicesByLang,
     getAllaboutServices,
-    updateaboutServices
+    updateaboutServices,
+    getAboutServiceById
 };

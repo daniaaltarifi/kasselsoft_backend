@@ -14,5 +14,6 @@ router.post('/add/:lang', AboutservicesController.createaboutServices);
 
 // Route to get all aboutteme data
 router.get('/', AboutservicesController.getAllaboutServices);
+router.get('/getbyid/:id', AboutservicesController.getAboutServiceById);
 
 module.exports = router;
