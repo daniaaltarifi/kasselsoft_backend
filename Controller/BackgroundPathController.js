@@ -38,6 +38,16 @@ const getbackgroundpathByLang = (req, res) => {
     res.status(200).json(result);
   });
 };
+const getbackgroundpathByJustLang = (req, res) => {
+  const { lang } = req.params;
+  const sqlSelect = "SELECT * FROM backgroundpath WHERE lang = ?";
+  db.query(sqlSelect, [lang], (err, result) => {
+    if (err) {
+      return res.json({ message: err.message });
+    }
+    res.status(200).json(result);
+  });
+};
 const updatebackgroundpath = (req, res) => {
   const { lang, id } = req.params;
   const { title,subtitle, path } = req.body;
@@ -87,14 +97,14 @@ const getbackgroundpath = (req, res) => {
     res.status(200).json(result);
   });
 };
-const getbackgroundpathById = (req, res) => {
-  const { id } = req.params;
-  const sqlSelect = "SELECT * FROM backgroundpath WHERE id = ?";
-  db.query(sqlSelect, [id], (err, result) => {
-    if (err) {
-      return res.json({ message: err.message });
-    }
-    res.status(200).json(result);
-  });
-};
-module.exports = { getbackgroundpathByLang, updatebackgroundpath,getbackgroundpath,getbackgroundpathById };
+// const getBackgroundById = (req, res) => {
+//   const { id } = req.params;
+//   const sqlSelect = "SELECT * FROM backgroundpath WHERE id = ?";
+//   db.query(sqlSelect, [id], (err, result) => {
+//     if (err) {
+//       return res.json({ message: err.message });
+//     }
+//     res.status(200).json(result);
+//   });
+// };
+module.exports = { getbackgroundpathByLang, updatebackgroundpath,getbackgroundpath,getbackgroundpathByJustLang };
