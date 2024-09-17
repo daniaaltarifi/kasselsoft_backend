@@ -9,6 +9,7 @@ router.get('/getbyid/:id', ContactFooterController.getcontactfooterById)
 
 router.get('/', ContactFooterController.getcontactfooter)
 router.put('/update/:lang/:id', ContactFooterController.updatecontactfooter);
+router.delete("/delete/:id", ContactFooterController.deletecontactfooter);
 
 
 module.exports =router
