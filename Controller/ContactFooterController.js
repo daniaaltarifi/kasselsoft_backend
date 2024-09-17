@@ -94,4 +94,28 @@ const getcontactfooterById = (req, res) => {
     res.status(200).json(result);
   });
 };
-module.exports = { getcontactfooterByLang, addcontactfooter, updatecontactfooter,getcontactfooter,getcontactfooterById };
+
+
+// Delete contact footer function
+const deletecontactfooter = async (req, res) => {
+  const { id } = req.params; // Get the ID from request parameters
+
+  const query = "DELETE FROM contactfooter WHERE id = ?";
+
+  db.query(query, [id], (error, results) => {
+    if (error) {
+      console.error("Error deleting contact footer:", error);
+      return res.status(500).json({ error: "Database error" });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ message: "No contact footer found with this ID" });
+    }
+
+    res.json({
+      message: "Contact footer deleted successfully",
+    });
+  });
+};
+
+module.exports = { getcontactfooterByLang, addcontactfooter, updatecontactfooter,getcontactfooter,getcontactfooterById ,deletecontactfooter};
