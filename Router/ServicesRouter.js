@@ -39,6 +39,7 @@ router.get('/:lang', ServicesController.getservicesByLang)
 router.get('/getbyid/:id', ServicesController.getservicesById)
 router.get('/', ServicesController.getservices)
 router.put('/update/:lang/:id',upload.fields([{ name: 'img', maxCount: 1 }]), ServicesController.updateservices);
+router.delete('/delete/:id',ServicesController.deleteServices)
 
 
 module.exports =router

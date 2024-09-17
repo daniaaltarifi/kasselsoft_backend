@@ -103,4 +103,17 @@ const getexperiencehomeById = (req, res) => {
       res.status(200).json(result);
     });
   };
-module.exports = { getexperiencehomeByLang, addexperiencehome, updateexperiencehome,getexperiencehome,getexperiencehomeById };
+  const deleteExperienceHome = (req, res) => {
+    const { id } = req.params;
+    const sqlDelete = "DELETE FROM experiencehome WHERE id = ? ";
+    db.query(sqlDelete, [id], (err, result) => {
+      if (err) {
+        return res.json({ message: err.message });
+      }
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ message: "No matching record found to delete" });
+      }
+      res.status(200).json({ message: "slider deleted successfully" });
+    });
+  }
+module.exports = { getexperiencehomeByLang, addexperiencehome, updateexperiencehome,getexperiencehome,getexperiencehomeById,deleteExperienceHome };

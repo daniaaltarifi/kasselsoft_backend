@@ -103,4 +103,17 @@ const getservicesById = (req, res) => {
       res.status(200).json(result);
     });
   };
-module.exports = { getservicesByLang, addservices, updateservices,getservices,getservicesById };
+  const deleteServices = (req, res) => {
+    const { id } = req.params;
+    const sqlDelete = "DELETE FROM services WHERE id = ? ";
+    db.query(sqlDelete, [id], (err, result) => {
+      if (err) {
+        return res.json({ message: err.message });
+      }
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ message: "No matching record found to delete" });
+      }
+      res.status(200).json({ message: "services deleted successfully" });
+    });
+  }
+module.exports = { getservicesByLang, addservices, updateservices,getservices,getservicesById,deleteServices };

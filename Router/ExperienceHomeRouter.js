@@ -39,6 +39,7 @@ router.get('/:lang', ExperienceHomeController.getexperiencehomeByLang)
 router.get('/getbyid/:id', ExperienceHomeController.getexperiencehomeById)
 router.get('/', ExperienceHomeController.getexperiencehome)
 router.put('/update/:lang/:id',upload.fields([{ name: 'img', maxCount: 1 }]), ExperienceHomeController.updateexperiencehome);
+router.delete('/delete/:id',ExperienceHomeController.deleteExperienceHome)
 
 
 module.exports =router

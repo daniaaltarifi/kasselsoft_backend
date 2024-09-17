@@ -39,6 +39,7 @@ router.get('/', IndustryImgController.getindustryimg)
 router.get('/getbyid/:id', IndustryImgController.getindustryimgById)
 
 router.put('/update/:id',upload.fields([{ name: 'img', maxCount: 1 }]), IndustryImgController.updateindustryimg);
+router.delete('/delete/:id',IndustryImgController.deleteIndustryImg)
 
 
 module.exports =router
