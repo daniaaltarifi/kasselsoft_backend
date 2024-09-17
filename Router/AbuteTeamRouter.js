@@ -11,9 +11,10 @@ router.get('/aboutteme/:lang', AboutTemeController.getAboutTemeByLang);
 router.put('/update/:lang/:id', AboutTemeController.updateAboutTeme);
 
 // Route to create a new aboutteme entry
-router.post('/aboutteme/:lang', AboutTemeController.createAboutTeme);
+router.post('/addteam/:lang', AboutTemeController.createAboutTeme);
 
 // Route to get all aboutteme data
 router.get('/', AboutTemeController.getAllAboutTeme);
-
+router.get('/getbyid/:id', AboutTemeController.getAboutTemeById);
+router.delete('/delete/:id', AboutTemeController.deleteAboutTeme);
 module.exports = router;

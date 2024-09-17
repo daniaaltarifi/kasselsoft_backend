@@ -31,6 +31,7 @@ const AbuteTeamRouter = require("./Router/AbuteTeamRouter.js");
 const aboutServicesRouter = require("./Router/AbuteServicesRouter.js");
 const TagsRouter = require("./Router/TagsRouter.js");
 const BlogsRouter = require("./Router/BlogsRouter.js");
+const JobdescriptionRouter = require("./Router/JobDescriptionRouter.js");
 
 const ContactFormRouter = require("./Router/ContactFormRouter.js");
 const app = express();
@@ -60,6 +61,7 @@ app.use("/careerform", CareerFormRouter);
 app.use("/careers", CareersRouter);
 app.use("/tags", TagsRouter);
 app.use("/blogs", BlogsRouter);
+app.use("/jobdescription", JobdescriptionRouter);
 
 app.use("/contactForm", ContactFormRouter);
 app.use("/api", AbuteRouter);
