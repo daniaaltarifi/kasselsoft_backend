@@ -34,9 +34,15 @@ const upload = multer({
   }
 });
 
-router.post('/add/:lang',upload.fields([{ name: 'img', maxCount: 1 }]), BlogsController.addblogs);
-router.get('/:lang', BlogsController.getblogsByLang)
+router.post('/add/:lang', 
+  upload.fields([
+    { name: 'main_img', maxCount: 1 }, // Main image
+    { name: 'img', maxCount: 10 } // Assuming a maximum of 10 images for descriptions
+  ]), 
+  BlogsController.addblogs
+);router.get('/:lang', BlogsController.getblogsByLang)
 router.get('/getbyid/:id', BlogsController.getblogsById)
+router.get('/:lang/getbyid/:id', BlogsController.getblogsByIdAndLang)
 router.get('/', BlogsController.getblogs)
 router.get('/recentblog/:lang', BlogsController.getRecentBlog)
 router.put('/update/:lang/:id',upload.fields([{ name: 'img', maxCount: 1 }]), BlogsController.updateblogs);
