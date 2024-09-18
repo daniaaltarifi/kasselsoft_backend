@@ -1,7 +1,25 @@
 const db = require("../config.js");
 const fs = require("fs");
 const path = require("path");
+const getBackgroundById = (req, res) => {
+  
+  const { id } = req.params;
 
+  if (!id) {
+    return res.status(400).json({ message: "Invalid ID parameter" });
+  }
+
+  const sqlSelect = "SELECT * FROM backgroundpath WHERE id = ?";
+  db.query(sqlSelect, [id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: err.message });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ message: "No matching record found" });
+    }
+    res.status(200).json(result[0]);
+  });
+};
 // Updated addbackgroundpath function
 // const addbackgroundpath = async (req, res) => {
 //   const { lang } = req.params;
@@ -97,14 +115,8 @@ const getbackgroundpath = (req, res) => {
     res.status(200).json(result);
   });
 };
-// const getBackgroundById = (req, res) => {
-//   const { id } = req.params;
-//   const sqlSelect = "SELECT * FROM backgroundpath WHERE id = ?";
-//   db.query(sqlSelect, [id], (err, result) => {
-//     if (err) {
-//       return res.json({ message: err.message });
-//     }
-//     res.status(200).json(result);
-//   });
-// };
-module.exports = { getbackgroundpathByLang, updatebackgroundpath,getbackgroundpath,getbackgroundpathByJustLang };
+
+
+
+
+module.exports = { getbackgroundpathByLang, updatebackgroundpath,getbackgroundpath,getbackgroundpathByJustLang,getBackgroundById };
