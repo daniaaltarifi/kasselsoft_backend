@@ -7,25 +7,30 @@ const addcareerform = async (req, res) => {
   const { first_name, last_name, email, position_id, exp, skills, phone } =
     req.body;
   const cv = req.files && req.files["cv"] ? req.files["cv"][0].filename : null;
+
+  // Check for required fields
   if (
     !first_name ||
     !last_name ||
     !email ||
     !position_id ||
     !exp ||
-    !skills ||
     !phone ||
     !cv
   ) {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
-  const query =
-    "INSERT INTO careerform (first_name, last_name, email, position_id, exp, skills, phone, cv) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+  // Convert skills array to a string
+  const skillsString = Array.isArray(skills) ? skills.join(",") : skills;
+
+  const query = `
+    INSERT INTO careerform (first_name, last_name, email, position_id, exp, skills, phone, cv) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
 
   db.query(
     query,
-    [first_name, last_name, email, position_id, exp, skills, phone, cv],
+    [first_name, last_name, email, position_id, exp, skillsString, phone, cv],
     (error, results) => {
       if (error) {
         console.error("Error inserting data:", error);
@@ -125,6 +130,21 @@ const getcareerform = (req, res) => {
     res.status(200).json(result);
   });
 };
+
+
+const getByFile = (req, res) => {
+  const fileName = req.params.filename;
+  const filePath = path.join(__dirname, '../images', fileName); 
+
+  res.download(filePath, fileName, (err) => {
+      if (err) {
+          // Log the error and send a 500 response
+          console.error('File download error:', err);
+          return res.status(500).json({ message: 'File download failed' });
+      }
+  });
+};
+
 const getcareerformById = (req, res) => {
   const { id } = req.params;
   const sqlSelect =
@@ -152,7 +172,8 @@ const deletecareerForm = (req, res) => {
 module.exports = {
   addcareerform,
   updatecareerform,
-  getcareerform,
+  getcareerform, // const addcareerform = async (req, res) => {
+    getByFile,
   getcareerformById,
   deletecareerForm,
 };
