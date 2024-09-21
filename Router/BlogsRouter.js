@@ -61,6 +61,7 @@ router.post(
 router.get("/:lang", BlogsController.getblogsByLang);
 router.get("/getbyid/:id", BlogsController.getblogsById);
 router.get("/:lang/getbyid/:id", BlogsController.getblogsByIdAndLang);
+router.get("/:lang/getbyidfront/:id", BlogsController.getblogsByIdAndLangForFront);
 router.get("/", BlogsController.getblogs);
 router.get("/recentblog/:lang", BlogsController.getRecentBlog);
 // router.put('/update/:lang/:id',upload.fields([{ name: 'img', maxCount: 1 }]), BlogsController.updateblogs);
@@ -82,5 +83,6 @@ router.put(
   BlogsController.updateblogs
 );
 router.delete("/delete/:lang/:id", BlogsController.deleteblogs);
+router.delete("/deletedescr/:id", BlogsController.deleteDescriptionofBlog);
 
 module.exports = router;
