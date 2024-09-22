@@ -3,64 +3,64 @@ const fs = require("fs");
 const path = require("path");
 
 // Updated addtermsandconditions function
-const addtermsandconditions = async (req, res) => {
-  const { lang, page_type } = req.params;
-  const {
-    main_title,
-    main_subtitle,
-    main_description,
-    tiltle_Interpretation,
-    description_Interpretation,
-    Severability_title,
-    Severability_description,
-  } = req.body;
-  const img_Interpretation =
-    req.files && req.files["img_Interpretation"]
-      ? req.files["img_Interpretation"][0].filename
-      : null;
-  const Severability_img =
-    req.files && req.files["Severability_img"]
-      ? req.files["Severability_img"][0].filename
-      : null;
-  if (
-    !lang || 
-    !page_type
-  ) {
-    return res.status(400).json({ error: "Missing required fields" });
-  }
-  console.log(req.body)
+// const addtermsandconditions = async (req, res) => {
+//   const { lang, page_type } = req.params;
+//   const {
+//     main_title,
+//     main_subtitle,
+//     main_description,
+//     tiltle_Interpretation,
+//     description_Interpretation,
+//     Severability_title,
+//     Severability_description,
+//   } = req.body;
+//   const img_Interpretation =
+//     req.files && req.files["img_Interpretation"]
+//       ? req.files["img_Interpretation"][0].filename
+//       : null;
+//   const Severability_img =
+//     req.files && req.files["Severability_img"]
+//       ? req.files["Severability_img"][0].filename
+//       : null;
+//   if (
+//     !lang || 
+//     !page_type
+//   ) {
+//     return res.status(400).json({ error: "Missing required fields" });
+//   }
+//   console.log(req.body)
 
-  const query =
-    "INSERT INTO termsandconditions (lang, page_type, main_title, main_subtitle, main_description, tiltle_Interpretation, description_Interpretation, Severability_title, Severability_description, img_Interpretation, Severability_img ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+//   const query =
+//     "INSERT INTO termsandconditions (lang, page_type, main_title, main_subtitle, main_description, tiltle_Interpretation, description_Interpretation, Severability_title, Severability_description, img_Interpretation, Severability_img ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-  db.query(
-    query,
-    [
-      lang,
-      page_type,
-      main_title,
-      main_subtitle,
-      main_description,
-      tiltle_Interpretation,
-      description_Interpretation,
-      Severability_title,
-      Severability_description,
-      img_Interpretation,
-      Severability_img,
-    ],
-    (error, results) => {
-      if (error) {
-        console.error("Error inserting data:", error);
-        return res.status(500).json({ error: "Database error" });
-      }
+//   db.query(
+//     query,
+//     [
+//       lang,
+//       page_type,
+//       main_title,
+//       main_subtitle,
+//       main_description,
+//       tiltle_Interpretation,
+//       description_Interpretation,
+//       Severability_title,
+//       Severability_description,
+//       img_Interpretation,
+//       Severability_img,
+//     ],
+//     (error, results) => {
+//       if (error) {
+//         console.error("Error inserting data:", error);
+//         return res.status(500).json({ error: "Database error" });
+//       }
 
-      res.json({
-        message: "termsandconditions added successfully",
-        insertId: results.insertId,
-      });
-    }
-  );
-};
+//       res.json({
+//         message: "termsandconditions added successfully",
+//         insertId: results.insertId,
+//       });
+//     }
+//   );
+// };
 const getTermsAndConditionsByPage = async (req, res) => {
   const { lang, page_type } = req.params; // Extract page_type from the request parameters
 
@@ -91,7 +91,7 @@ const gettermsandconditionsByLang = (req, res) => {
   });
 };
 const updatetermsandconditions = (req, res) => {
-  const { lang, id, page_type } = req.params;
+  const { lang, id } = req.params;
   const {
     main_title,
     main_subtitle,
@@ -125,10 +125,10 @@ const updatetermsandconditions = (req, res) => {
       img_Interpretation, 
       Severability_img 
     FROM termsandconditions 
-    WHERE lang = ? AND id = ? AND page_type = ?
+    WHERE lang = ? AND id = ?
   `;
 
-  db.query(sqlSelect, [lang, id , page_type], (err, results) => {
+  db.query(sqlSelect, [lang, id], (err, results) => {
     if (err) {
       console.error("Error fetching current data:", err);
       return res.status(500).json({ message: err.message });
@@ -173,7 +173,7 @@ const updatetermsandconditions = (req, res) => {
         ? img_Interpretation
         : existing.img_Interpretation;
     const updatedSeverability_img =
-      Severability_img !== null ? Severability_img : existing.Seversability_img;
+    Severability_img !== null ? Severability_img : existing.Severability_img;
 
     // Construct the update SQL query
     const sqlUpdate = `
@@ -188,7 +188,7 @@ const updatetermsandconditions = (req, res) => {
         Severability_description = ?, 
         img_Interpretation = ?, 
         Severability_img = ? 
-      WHERE lang = ? AND id = ? AND page_type = ?
+      WHERE lang = ? AND id = ? 
     `;
 
     db.query(
@@ -204,8 +204,8 @@ const updatetermsandconditions = (req, res) => {
         updatedimg_Interpretation,
         updatedSeverability_img,
         lang,
-        id,
-        page_type
+        id
+        
       ],
       (err, result) => {
         if (err) {
@@ -227,15 +227,15 @@ const updatetermsandconditions = (req, res) => {
   });
 };
 
-const gettermsandconditions = (req, res) => {
-  const sqlSelect = "SELECT * FROM termsandconditions";
-  db.query(sqlSelect, (err, result) => {
-    if (err) {
-      return res.json({ message: err.message });
-    }
-    res.status(200).json(result);
-  });
-};
+// const gettermsandconditions = (req, res) => {
+//   const sqlSelect = "SELECT * FROM termsandconditions";
+//   db.query(sqlSelect, (err, result) => {
+//     if (err) {
+//       return res.json({ message: err.message });
+//     }
+//     res.status(200).json(result);
+//   });
+// };
 const gettermsandconditionsById = (req, res) => {
   const { id } = req.params;
   const sqlSelect = "SELECT * FROM termsandconditions WHERE id = ?";
@@ -251,10 +251,10 @@ const gettermsandconditionsById = (req, res) => {
 
 // Updated addtermsblackdata function
 const addtermsblackdata = async (req, res) => {
-  const { lang, page_type } = req.params;
-  const { title, description } = req.body;
+  const { lang } = req.params;
+  const { title, description,page_type } = req.body;
 
-  if (!title || !description) {
+  if (!title || !description || !page_type) {
     return res.status(400).json({ error: "Missing value " });
   }
 
@@ -303,12 +303,12 @@ const gettermsblackdataByLang = (req, res) => {
   });
 };
 const updatetermsblackdata = (req, res) => {
-  const { lang, id,page_type } = req.params;
-  const { title, description } = req.body;
+  const { lang, id } = req.params;
+  const { title, description,page_type } = req.body;
   const sqlSelect =
-    "SELECT title, description FROM termsblackdata WHERE lang = ? AND id = ? AND page_type = ?";
+    "SELECT title, description, page_type FROM termsblackdata WHERE lang = ? AND id = ?";
 
-  db.query(sqlSelect, [lang, id, page_type], (err, results) => {
+  db.query(sqlSelect, [lang, id], (err, results) => {
     if (err) {
       console.error("Error fetching current data:", err);
       return res.status(500).json({ message: err.message });
@@ -326,13 +326,15 @@ const updatetermsblackdata = (req, res) => {
     // Update fields only if new values are provided
     const updatedTitle = title !== undefined ? title : existing.title;
     const updatedDescription =
-      description !== undefined ? description : existing.description;
+      description !== undefined ? description : existing.description; 
+      const updatedpage_type =
+      page_type !== undefined ? page_type : existing.page_type;
     const sqlUpdate =
-      "UPDATE termsblackdata SET title = ?, description = ? WHERE lang = ? AND id = ? AND page_type = ?";
+      "UPDATE termsblackdata SET title = ?, description = ?, page_type = ? WHERE lang = ? AND id = ?";
 
     db.query(
       sqlUpdate,
-      [updatedTitle, updatedDescription, lang, id , page_type],
+      [updatedTitle, updatedDescription,updatedpage_type, lang, id],
       (err, result) => {
         if (err) {
           console.error("Error updating data:", err);
@@ -395,10 +397,10 @@ const deletetermsblackdata = (req, res) => {
 
 // Updated addtermsblackdata function
 const addtermsbluedata = async (req, res) => {
-  const { lang ,page_type} = req.params;
-  const { title, description } = req.body;
+  const { lang } = req.params;
+  const { title, description,page_type} = req.body;
 
-  if (!title || !description) {
+  if (!title || !description || !page_type) {
     return res.status(400).json({ error: "Missing value " });
   }
 
@@ -447,12 +449,12 @@ const gettermsbluedataByLang = (req, res) => {
   });
 };
 const updatetermsbluedata = (req, res) => {
-  const { lang, id,page_type } = req.params;
-  const { title, description } = req.body;
+  const { lang, id } = req.params;
+  const { title, description,page_type } = req.body;
   const sqlSelect =
-    "SELECT title, description FROM termsbluedata WHERE lang = ? AND id = ? AND page_type = ?";
+    "SELECT title, description, page_type FROM termsbluedata WHERE lang = ? AND id = ?";
 
-  db.query(sqlSelect, [lang, id, page_type], (err, results) => {
+  db.query(sqlSelect, [lang, id], (err, results) => {
     if (err) {
       console.error("Error fetching current data:", err);
       return res.status(500).json({ message: err.message });
@@ -471,12 +473,14 @@ const updatetermsbluedata = (req, res) => {
     const updatedTitle = title !== undefined ? title : existing.title;
     const updatedDescription =
       description !== undefined ? description : existing.description;
+      const updatedpage_type =
+      page_type !== undefined ? page_type : existing.page_type;
     const sqlUpdate =
-      "UPDATE termsbluedata SET title = ?, description = ? WHERE lang = ? AND id = ? AND page_type = ?";
+      "UPDATE termsbluedata SET title = ?, description = ?, page_type = ?  WHERE lang = ? AND id = ?";
 
     db.query(
       sqlUpdate,
-      [updatedTitle, updatedDescription, lang, id, page_type],
+      [updatedTitle, updatedDescription,updatedpage_type, lang, id],
       (err, result) => {
         if (err) {
           console.error("Error updating data:", err);
@@ -534,76 +538,14 @@ const deletetermsbluedata = (req, res) => {
     res.status(200).json({ message: "Record deleted successfully" });
   });
 };
-// CONTACT ************
-const updateContactTerms = (req, res) => {
-  const { lang, id } = req.params;
-  const { title, description, email, web_link, phone } = req.body;
-  const sqlSelect =
-    "SELECT title, description, email, web_link, phone FROM termscontact WHERE lang = ? AND id = ?";
 
-  db.query(sqlSelect, [lang, id], (err, results) => {
-    if (err) {
-      console.error("Error fetching current data:", err);
-      return res.status(500).json({ message: err.message });
-    }
 
-    if (results.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "No matching record found to update" });
-    }
-
-    // Get existing values
-    const existing = results[0];
-
-    // Update fields only if new values are provided
-    const updatedTitle = title !== undefined ? title : existing.title;
-    const updatedDescription = description !== undefined ? description : existing.description;
-    const updatedemail = email !== undefined ? email : existing.email;
-    const updateweblink = web_link !== undefined ? web_link : existing.web_link;
-    const updatedphone = phone !== undefined ? phone : existing.phone;
-
-    const sqlUpdate =
-      "UPDATE termscontact SET title = ?, description = ?, email = ?, web_link = ?, phone = ? WHERE lang = ? AND id = ?";
-
-    db.query(
-      sqlUpdate,
-      [updatedTitle, updatedDescription,updatedemail,updateweblink,updatedphone, lang, id],
-      (err, result) => {
-        if (err) {
-          console.error("Error updating data:", err);
-          return res.status(500).json({ message: err.message });
-        }
-
-        if (result.affectedRows === 0) {
-          return res
-            .status(404)
-            .json({ message: "No matching record found to update" });
-        }
-
-        res
-          .status(200)
-          .json({ message: "termsbluedata updated successfully" });
-      }
-    );
-  });
-};
-const gettermsContactByLang = (req, res) => {
-  const { lang } = req.params;
-  const sqlSelect = "SELECT * FROM termscontact WHERE lang = ?";
-  db.query(sqlSelect, [lang], (err, result) => {
-    if (err) {
-      return res.json({ message: err.message });
-    }
-    res.status(200).json(result);
-  });
-};
 module.exports = {
   // MAIN TERMS
   gettermsandconditionsByLang,
-  addtermsandconditions,
+  // addtermsandconditions,
   updatetermsandconditions,
-  gettermsandconditions,
+  // gettermsandconditions,
   gettermsandconditionsById,
   getTermsAndConditionsByPage,
   // BLaCK DATA
@@ -623,7 +565,4 @@ module.exports = {
    deletetermsbluedata,
    getTermsbluedataByPage,
 
-  //  CONATCT
-  updateContactTerms,
-  gettermsContactByLang
 };
