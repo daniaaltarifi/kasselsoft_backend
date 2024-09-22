@@ -34,32 +34,30 @@ const upload = multer({
   }
 });
 // MAIN DATA
-router.post('/add/:lang/:page_type',upload.fields([{ name: 'img_Interpretation', maxCount: 1 }, { name: 'Severability_img', maxCount: 1 }]), TermsAndConditionController.addtermsandconditions);
+// router.post('/add/:lang/:page_type',upload.fields([{ name: 'img_Interpretation', maxCount: 1 }, { name: 'Severability_img', maxCount: 1 }]), TermsAndConditionController.addtermsandconditions);
 router.get('/:lang', TermsAndConditionController.gettermsandconditionsByLang)
 router.get('/:lang/:page_type', TermsAndConditionController.getTermsAndConditionsByPage)
-router.get('/getbyid/:id', TermsAndConditionController.gettermsandconditionsById)
-router.get('/', TermsAndConditionController.gettermsandconditions)
-router.put('/update/:lang/:id/:page_type',upload.fields([{ 
+router.get('/terms/getbyid/:id', TermsAndConditionController.gettermsandconditionsById)
+// router.get('/', TermsAndConditionController.gettermsandconditions)
+router.put('/update/:lang/:id',upload.fields([{ 
   name: 'img_Interpretation', maxCount: 1 }, { name: 'Severability_img', maxCount: 1 }]), TermsAndConditionController.updatetermsandconditions);
 
 // BLACK DATA
-router.post('/addblack/:lang/:page_type', TermsAndConditionController.addtermsblackdata);
-router.get('/black/:lang', TermsAndConditionController.gettermsblackdataByLang)
+router.post('/addblack/:lang', TermsAndConditionController.addtermsblackdata);
+router.get('/black/get/:lang', TermsAndConditionController.gettermsblackdataByLang)
 router.get('/black/:lang/:page_type', TermsAndConditionController.getTermsblackdataByPage)
-router.get('black/getbyid/:id', TermsAndConditionController.gettermsblackdataById)
+router.get('/data/black/getbyid/:id', TermsAndConditionController.gettermsblackdataById)
 router.get('/black', TermsAndConditionController.gettermsblackdata)
-router.put('/black/update/:lang/:id/:page_type', TermsAndConditionController.updatetermsblackdata);
+router.put('/black/update/:lang/:id', TermsAndConditionController.updatetermsblackdata);
 router.delete('/black/delete/:lang/:id', TermsAndConditionController.deletetermsblackdata);
 // BLUE DATA
-router.post('/addblue/:lang/:page_type', TermsAndConditionController.addtermsbluedata);
-router.get('/blue/:lang', TermsAndConditionController.gettermsbluedataByLang)
+router.post('/addblue/:lang', TermsAndConditionController.addtermsbluedata);
+router.get('/blue/get/:lang', TermsAndConditionController.gettermsbluedataByLang)
 router.get('/blue/:lang/:page_type', TermsAndConditionController.getTermsbluedataByPage)
-router.get('blue/getbyid/:id', TermsAndConditionController.gettermsbluedataById)
+router.get('/data/blue/getbyid/:id', TermsAndConditionController.gettermsbluedataById)
 router.get('/blue', TermsAndConditionController.gettermsbluedata)
-router.put('/blue/update/:lang/:id/:page_type', TermsAndConditionController.updatetermsbluedata);
+router.put('/blue/update/:lang/:id', TermsAndConditionController.updatetermsbluedata);
 router.delete('/blue/delete/:lang/:id', TermsAndConditionController.deletetermsbluedata);
-// CONATCT
-router.put('/contact/update/:lang/:id', TermsAndConditionController.updateContactTerms);
-router.get('/contact/:lang', TermsAndConditionController.gettermsContactByLang);
+
 
 module.exports =router
