@@ -38,6 +38,7 @@ const upload = multer({
 
 // Route to get about page data by language (No file upload required for GET requests)
 router.get('/about/:lang', AboutController.getAboutByLang);
+router.get('/aboutbyid/:id', AboutController.getaboutById);
 
 // Route to update about page (Upload multiple images if provided)
 router.put('/update/:lang/:id', upload.fields([

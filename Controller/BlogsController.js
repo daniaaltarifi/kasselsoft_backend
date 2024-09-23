@@ -387,7 +387,7 @@ const getblogsById = (req, res) => {
 const getblogsByIdAndLangForFront = (req, res) => {
   const { lang, id } = req.params;
   const sqlSelect = `
-    SELECT blogs.*,blogs.main_description,
+    SELECT blogs.*,blogs.main_description,blogs.main_img,
            tags.tag_name AS tag_name,
            blog_descriptions.id AS description_id, 
            blog_descriptions.description AS description,
@@ -412,6 +412,7 @@ const getblogsByIdAndLangForFront = (req, res) => {
     const blog = {
       id: result[0].id,
       title: result[0].title,
+      main_img: result[0].main_img,
       main_description: result[0].main_description, // Add main_description here
       tag_name: result[0].tag_name,
       descriptions: [],
