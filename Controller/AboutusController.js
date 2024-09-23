@@ -29,7 +29,17 @@ const getAboutByLang = (req, res) => {
     });
   };
   
- 
+ const getaboutById = (req, res) => {
+    const { id } = req.params;
+    const sqlSelect = "SELECT * FROM about WHERE id =?";
+    db.query(sqlSelect, [id], (err, result) => {
+      if (err) {
+        return res.json({ message: err.message });
+      }
+      res.status(200).json(result);
+    });
+  
+ }
 // Update About Page
 const updateAbout = (req, res) => {
     const { lang,id } = req.params;
@@ -55,8 +65,8 @@ const updateAbout = (req, res) => {
 
         // Update the fields only if they are provided, otherwise retain existing values
         const existing = results[0];
-        const updatedImage1 = image1 !== undefined ? image1 : existing.image1;
-        const updatedImage2 = image2 !== undefined ? image2 : existing.image2;
+        const updatedImage1 = image1 !== null ? image1 : existing.image1;
+        const updatedImage2 = image2 !== null ? image2 : existing.image2;
         const updatedPoint1 = point1 !== undefined ? point1 : existing.point1;
         const updatedPoint2 = point2 !== undefined ? point2 : existing.point2;
         const updatedPoint3 = point3 !== undefined ? point3 : existing.point3;
@@ -126,4 +136,4 @@ const addAbout = (req, res) => {
     );
 };
 
-module.exports = { getAboutByLang, getAbout, updateAbout,addAbout };
+module.exports = { getAboutByLang, getAbout, updateAbout,addAbout,getaboutById };

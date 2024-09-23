@@ -5,16 +5,18 @@ const path = require("path");
 // Updated addjobdescrform function
 const addjobdescrform = async (req, res) => {
     const {careers_id}=req.params
-  const { first_name, last_name, email, exp, skills, phone } =
+  const { first_name, last_name, email, exp,skills, phone } =
     req.body;
+    const skillsString = Array.isArray(skills) ? skills.join(",") : skills;
+
   const cv = req.files && req.files["cv"] ? req.files["cv"][0].filename : null;
+
   if (
     !first_name ||
     !last_name ||
     !email ||
     !careers_id ||
     !exp ||
-    !skills ||
     !phone ||
     !cv
   ) {
@@ -26,7 +28,7 @@ const addjobdescrform = async (req, res) => {
 
   db.query(
     query,
-    [first_name, last_name, email, careers_id, exp, skills, phone, cv],
+    [first_name, last_name, email, careers_id, exp, skillsString, phone, cv],
     (error, results) => {
       if (error) {
         console.error("Error inserting data:", error);
