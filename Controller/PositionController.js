@@ -29,50 +29,50 @@ const addposition = async (req, res) => {
   };
   
 
-const updateposition = (req, res) => {
-    const { id } = req.params;
-    const { position_name } = req.body;
+// const updateposition = (req, res) => {
+//     const { id } = req.params;
+//     const { position_name } = req.body;
   
-    // Query to select the current data
-    const sqlSelect = "SELECT position_name FROM positionrole WHERE id = ?";
+//     // Query to select the current data
+//     const sqlSelect = "SELECT position_name FROM positionrole WHERE id = ?";
       
-    db.query(sqlSelect, [id], (err, results) => {
-      if (err) {
-        console.error("Error fetching current data:", err);
-        return res.status(500).json({ message: err.message });
-      }
+//     db.query(sqlSelect, [id], (err, results) => {
+//       if (err) {
+//         console.error("Error fetching current data:", err);
+//         return res.status(500).json({ message: err.message });
+//       }
   
-      if (results.length === 0) {
-        return res.status(404).json({ message: "No matching record found to update" });
-      }
+//       if (results.length === 0) {
+//         return res.status(404).json({ message: "No matching record found to update" });
+//       }
   
-      // Get existing value
-      const existing = results[0].position_name;
+//       // Get existing value
+//       const existing = results[0].position_name;
   
-      // Update field only if new value is provided
-      const updatedPosition = position_name !== undefined ? position_name : existing;
+//       // Update field only if new value is provided
+//       const updatedPosition = position_name !== undefined ? position_name : existing;
       
-      if (updatedPosition === existing) {
-        return res.status(400).json({ message: "No change in position name" });
-      }
+//       if (updatedPosition === existing) {
+//         return res.status(400).json({ message: "No change in position name" });
+//       }
   
-      // Correct SQL query syntax for update
-      const sqlUpdate = "UPDATE positionrole SET position_name = ? WHERE id = ?";
+//       // Correct SQL query syntax for update
+//       const sqlUpdate = "UPDATE positionrole SET position_name = ? WHERE id = ?";
   
-      db.query(sqlUpdate, [updatedPosition, id], (err, result) => {
-        if (err) {
-          console.error("Error updating data:", err);
-          return res.status(500).json({ message: err.message });
-        }
+//       db.query(sqlUpdate, [updatedPosition, id], (err, result) => {
+//         if (err) {
+//           console.error("Error updating data:", err);
+//           return res.status(500).json({ message: err.message });
+//         }
   
-        if (result.affectedRows === 0) {
-          return res.status(404).json({ message: "No matching record found to update" });
-        }
+//         if (result.affectedRows === 0) {
+//           return res.status(404).json({ message: "No matching record found to update" });
+//         }
   
-        res.status(200).json({ message: "Position updated successfully" });
-      });
-    });
-  };
+//         res.status(200).json({ message: "Position updated successfully" });
+//       });
+//     });
+//   };
   
 const getposition = (req, res) => {
   const sqlSelect = "SELECT * FROM positionrole";
@@ -93,4 +93,14 @@ const getpositionById = (req, res) => {
     res.status(200).json(result);
   });
 };
-module.exports = { addposition, updateposition,getposition,getpositionById };
+const deleteposition = (req, res) => {
+  const { id } = req.params;
+  const sqlDelete = "DELETE FROM positionrole WHERE id =?";
+  db.query(sqlDelete, [id], (err, result) => {
+    if (err) {
+      return res.json({ message: err.message });
+    }
+    res.status(200).json({ message: "Position deleted successfully" });
+  });
+}
+module.exports = { addposition,getposition,getpositionById,deleteposition };

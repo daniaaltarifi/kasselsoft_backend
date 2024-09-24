@@ -37,6 +37,8 @@ const upload = multer({
 router.post('/add/:careers_id',upload.fields([{ name: 'cv', maxCount: 1 }]), JobDescriptionontroller.addjobdescrform);
 router.get('/getbyid/:id', JobDescriptionontroller.getjobdescrformById)
 router.get('/', JobDescriptionontroller.getjobdescrform)
+router.get('/byrole/:filename', JobDescriptionontroller.getByFileOfRole);
+
 // router.put('/update/:id',upload.fields([{ name: 'cv', maxCount: 1 }]), JobDescriptionontroller.updatecareerform);
 router.delete('/delete/:id', JobDescriptionontroller.deletejobdescrform);
 

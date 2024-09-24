@@ -7,7 +7,8 @@ router.post('/add', PositionController.addposition);
 router.get('/getbyid/:id', PositionController.getpositionById)
 
 router.get('/', PositionController.getposition)
-router.put('/update/:id', PositionController.updateposition);
+router.delete('/delete/:id',PositionController.deleteposition)
+// router.put('/update/:id', PositionController.updateposition);
 
 
 module.exports =router
