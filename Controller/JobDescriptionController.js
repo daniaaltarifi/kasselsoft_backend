@@ -152,9 +152,22 @@ const deletejobdescrform = (req, res) => {
     res.status(200).json({ message: "jobdescrform Deleted successfully" });
   });
 };
+const getByFileOfRole = (req, res) => {
+  const fileName = req.params.filename;
+  const filePath = path.join(__dirname, '../images', fileName); 
+
+  res.download(filePath, fileName, (err) => {
+      if (err) {
+          // Log the error and send a 500 response
+          console.error('File download error:', err);
+          return res.status(500).json({ message: 'File download failed' });
+      }
+  });
+};
 module.exports = {
   addjobdescrform,
   getjobdescrform,
   getjobdescrformById,
   deletejobdescrform,
+  getByFileOfRole,
 };
