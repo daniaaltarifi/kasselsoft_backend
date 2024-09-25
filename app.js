@@ -32,12 +32,32 @@ const aboutServicesRouter = require("./Router/AbuteServicesRouter.js");
 const TagsRouter = require("./Router/TagsRouter.js");
 const BlogsRouter = require("./Router/BlogsRouter.js");
 const JobdescriptionRouter = require("./Router/JobDescriptionRouter.js");
-
 const ContactFormRouter = require("./Router/ContactFormRouter.js");
+const LoginRouter = require("./Router/LoginRouter.js");
 const app = express();
 const PORT = process.env.PORT || 3005;
 app.use(express.json());
-app.use(cors());
+const allowedOrigins = [
+  'https://dashboard.kasselsoft.online',
+  'https://kasselsoft.online'
+];
+
+// CORS options with a dynamic origin check
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or Postman)
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true, // Allow credentials
+};
+
+// Use the CORS middleware
+app.use(cors(corsOptions));
+
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.static("images"));
@@ -62,6 +82,7 @@ app.use("/careers", CareersRouter);
 app.use("/tags", TagsRouter);
 app.use("/blogs", BlogsRouter);
 app.use("/jobdescription", JobdescriptionRouter);
+app.use("/auth", LoginRouter);
 
 app.use("/contactForm", ContactFormRouter);
 app.use("/api", AbuteRouter);
