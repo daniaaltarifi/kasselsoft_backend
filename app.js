@@ -37,9 +37,13 @@ const LoginRouter = require("./Router/LoginRouter.js");
 const app = express();
 const PORT = process.env.PORT || 3005;
 app.use(express.json());
+// const allowedOrigins = [
+//   'https://dashboard.kasselsoft.online',
+//   'https://kasselsoft.online'
+// ];
 const allowedOrigins = [
-  'https://dashboard.kasselsoft.online',
-  'https://kasselsoft.online'
+  'http://localhost:5000',
+  'http://localhost:3000'
 ];
 
 // CORS options with a dynamic origin check

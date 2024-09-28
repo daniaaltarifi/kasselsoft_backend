@@ -9,5 +9,7 @@ app.use(bodyParser.json());
 router.post('/signup/post', loginController.signUp);
 router.post('/login/post',bodyParser.json(), loginController.login);
 router.post('/logout', loginController.logout)
+router.get('/getusers', loginController.getUser)
+router.delete('/delete/:id', loginController.deleteUser)
 
 module.exports = router

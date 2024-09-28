@@ -108,20 +108,20 @@ const addblogs = async (req, res) => {
     }
   );
 };
-
 const getblogsByLang = (req, res) => {
   const { lang } = req.params;
   const sqlSelect = `
-  SELECT blogs.*, 
-         tags.tag_name AS tag_name,
-         blog_descriptions.id AS description_id, 
-         blog_descriptions.description AS description,
-         blog_images.img AS img
-  FROM blogs
-  JOIN tags ON blogs.tag_id = tags.id
-  LEFT JOIN blog_descriptions ON blog_descriptions.blog_id = blogs.id
-  LEFT JOIN blog_images ON blog_images.blog_description_id = blog_descriptions.id
-  WHERE blogs.lang = ?;
+    SELECT blogs.*, 
+           tags.tag_name AS tag_name,
+           blog_descriptions.id AS description_id, 
+           blog_descriptions.description AS description,
+           blog_images.img AS img,
+           blog_images.id AS image_id  -- Get image ID as well
+    FROM blogs
+    JOIN tags ON blogs.tag_id = tags.id
+    LEFT JOIN blog_descriptions ON blog_descriptions.blog_id = blogs.id
+    LEFT JOIN blog_images ON blog_images.blog_description_id = blog_descriptions.id
+    WHERE blogs.lang = ?;
   `;
 
   db.query(sqlSelect, [lang], (err, result) => {
@@ -137,62 +137,45 @@ const getblogsByLang = (req, res) => {
       // Initialize the blog object if it doesn't exist
       if (!blogsMap[blogId]) {
         blogsMap[blogId] = {
-          ...row,
-          updated_at: new Date(row.updated_at).toISOString().split("T")[0], // Format the date
-          descriptions: [],
-          images: [],
+          id: blogId,
+          lang: row.lang,
+          title: row.title,
+          main_description: row.main_description,
+          main_img: row.main_img,
+          tag_id: row.tag_id,
+          created_at: row.created_at,
+          updated_at: new Date(row.updated_at).toISOString().split("T")[0],
+          tag_name: row.tag_name,
+          descriptions: {},
         };
       }
 
-      // Add descriptions and images if they exist
+      // Add descriptions and group images by description ID
       if (row.description_id) {
-        blogsMap[blogId].descriptions.push({
-          id: row.description_id,
-          description: row.description,
-        });
-      }
+        if (!blogsMap[blogId].descriptions[row.description_id]) {
+          blogsMap[blogId].descriptions[row.description_id] = {
+            id: row.description_id,
+            description: row.description,
+            images: [],
+          };
+        }
 
-      if (row.img) {
-        blogsMap[blogId].images.push(row.img);
+        // Add image to the corresponding description
+        if (row.img) {
+          blogsMap[blogId].descriptions[row.description_id].images.push({
+            id: row.image_id, // Include the image ID
+            img: row.img,
+          });
+        }
       }
     });
 
-    // Convert the blogsMap object back to an array
-    const formattedResults = Object.values(blogsMap);
+    // Convert the descriptions object back to an array
+    const formattedResults = Object.values(blogsMap).map(blog => ({
+      ...blog,
+      descriptions: Object.values(blog.descriptions), // Convert descriptions object to array
+    }));
 
-    res.status(200).json(formattedResults);
-  });
-};
-
-const getRecentBlog = (req, res) => {
-  const { lang } = req.params;
-
-  // Query to select the 3 most recent blog entries
-  const sqlSelect =
-    "SELECT * FROM blogs WHERE lang = ? ORDER BY id DESC LIMIT 3";
-
-  db.query(sqlSelect, [lang], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: err.message });
-    }
-
-    // If no results found
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No blog entries found" });
-    }
-
-    // Format each result to include only the date part
-    const formattedResults = result.map((blog) => {
-      // Parse the string date into a Date object
-      const updatedDate = new Date(blog.updated_at);
-
-      return {
-        ...blog,
-        updated_at: updatedDate.toISOString().split("T")[0], // Format the date
-      };
-    });
-
-    // Return the formatted results
     res.status(200).json(formattedResults);
   });
 };
@@ -319,50 +302,6 @@ const updateblogs = async (req, res) => {
   });
 };
 
-// const updateblogs = (req, res) => {
-//     const { lang, id } = req.params;
-//     const { title, main_description, tag_id } = req.body;
-//     const img = req.files && req.files["img"] ? req.files["img"][0].filename : null;
-
-//     // First, retrieve the current values
-//     const sqlSelect = "SELECT * FROM blogs WHERE lang = ? AND id = ?";
-
-//     db.query(sqlSelect, [lang, id], (err, results) => {
-//       if (err) {
-//         console.error("Error fetching current data:", err);
-//         return res.status(500).json({ message: "Error fetching current data: " + err.message });
-//       }
-
-//       if (results.length === 0) {
-//         return res.status(404).json({ message: "No matching record found to update" });
-//       }
-
-//       // Get existing values
-//       const existing = results[0];
-
-//       // Update fields only if new values are provided
-//       const updatedTitle = title !== undefined ? title : existing.title;
-//       const updatedmain_description = main_description !== undefined ? main_description : existing.main_description;
-//       const updatedTagId = tag_id !== undefined ? tag_id : existing.tag_id;
-//       const updatedImg = img !== null ? img : existing.img;
-
-//       // Construct the update SQL query
-//       const sqlUpdate = "UPDATE blogs SET title = ?, main_description = ?, tag_id = ?, img = ? WHERE lang = ? AND id = ?";
-
-//       db.query(sqlUpdate, [updatedTitle, updatedmain_description, updatedTagId, updatedImg, lang, id], (err, result) => {
-//         if (err) {
-//           console.error("Error updating data:", err);
-//           return res.status(500).json({ message: "Error updating data: " + err.message });
-//         }
-
-//         if (result.affectedRows === 0) {
-//           return res.status(404).json({ message: "No matching record found to update" });
-//         }
-
-//         res.status(200).json({ message: "Blog updated successfully" });
-//       });
-//     });
-//   };
 
 const getblogs = (req, res) => {
   const sqlSelect = "SELECT * FROM blogs";
@@ -488,6 +427,135 @@ const deleteDescriptionofBlog = (req, res) => {
     res.status(200).json("Deleted successfully");
   });
 };
+const getDescriptionsandimg = (req, res) => {
+  const { id } = req.params;
+  const sqlSelect = `
+    SELECT 
+      blog_descriptions.id AS description_id, 
+      blog_descriptions.description AS description, 
+      blog_images.id AS img_id,
+      blog_images.img AS img
+    FROM blog_descriptions
+    LEFT JOIN blog_images ON blog_images.blog_description_id = blog_descriptions.id
+    WHERE blog_descriptions.id = ?;
+  `;
+
+  db.query(sqlSelect, [id], (err, results) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res.status(500).json({ message: err.message });
+    }
+
+    // Initialize response structure
+    const response = {
+      description_id: null,
+      description: null,
+      images: []
+    };
+
+    // Process results to populate the response
+    results.forEach((row) => {
+      if (row.description_id) {
+        response.description_id = row.description_id;
+        response.description = row.description;
+      }
+
+      if (row.img_id) {
+        response.images.push({
+          id: row.img_id,
+          img: row.img
+        });
+      }
+    });
+
+    // Return structured response
+    res.status(200).json(response);
+  });
+};
+
+const updateDescription = (req, res) => {
+  const { id } = req.params; 
+  const { description } = req.body; 
+
+  const sqlUpdate = "UPDATE blog_descriptions SET description = ? WHERE id = ?";
+
+  db.query(sqlUpdate, [description, id], (err, result) => {
+    if (err) {
+      console.error("Error updating description:", err);
+      return res.status(500).json({ message: err.message });
+    }
+
+    // Check if any rows were affected
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Description not found" });
+    }
+
+    res.status(200).json({
+      message: "Description updated successfully",
+      updatedDescription: description, // Include the updated description
+    });
+  });
+};
+
+const updateImg = (req, res) => {
+  const { id } = req.params;
+  const img = req.files["img"] ? req.files["img"][0].filename : null;
+  const sqlUpdate =
+    "UPDATE blog_images SET img = ? WHERE id = ?";
+  db.query(sqlUpdate, [img, id], (err, result) => {
+    if (err) {
+      console.error("Error updating img:", err);
+      return res.status(500).json({ message: err.message });
+    }
+    res.status(200).json([{ message: "Image updated successfully", id: id, img}]);
+  });
+};
+const deleteimgblog = (req, res) => {
+  const { id } = req.params;
+  const sqlDelete = "DELETE FROM blog_images WHERE id =?";
+  db.query(sqlDelete, [id], (err, result) => {
+    if (err) {
+      console.error("Error deleting img:", err);
+      return res.status(500).json({ message: err.message });
+    }
+    res.status(200).json({ message: "Image deleted successfully", id: id });
+  });
+}
+
+const addimgblog = (req, res) => {
+  const { blog_description_id } = req.params;
+  // Ensure blog_description_id is provided
+  if (!blog_description_id) {
+    return res.status(400).json({ message: "Blog description ID is required." });
+  }
+
+  const images = req.files["newimg"];
+
+  if (!images || images.length === 0) {
+    return res.status(400).json({ message: "No images uploaded." });
+  }
+
+  const sqlInsert = "INSERT INTO blog_images (blog_description_id, img) VALUES (?, ?)";
+  
+  // Create a function to insert images
+  const insertImages = (index) => {
+    if (index < images.length) {
+      const img = images[index].filename;
+      db.query(sqlInsert, [blog_description_id, img], (err, result) => {
+        if (err) {
+          console.error("Error inserting img:", err);
+          return res.status(500).json({ message: err.message });
+        }
+        insertImages(index + 1);
+      });
+    } else {
+      res.status(200).json({ message: "Images added successfully." });
+    }
+  };
+  // Start inserting images from the first one
+  insertImages(0);
+};
+
 module.exports = {
   getblogsByLang,
   addblogs,
@@ -495,8 +563,14 @@ module.exports = {
   getblogs,
   getblogsById,
   deleteblogs,
-  getRecentBlog,
+  // getRecentBlog,
   getblogsByIdAndLang,
-  deleteDescriptionofBlog,
   getblogsByIdAndLangForFront,
+  // description and img
+  deleteDescriptionofBlog,
+  getDescriptionsandimg,
+  updateDescription,
+  updateImg,
+  deleteimgblog,
+  addimgblog
 };

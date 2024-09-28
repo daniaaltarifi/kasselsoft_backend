@@ -76,5 +76,24 @@ const logout = async (req, res) => {
     res.clearCookie("token", { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
     return res.json({ Status: "Logout Success" });
   };
-  
-module.exports = { signUp, login, logout };
+  const getUser = async (req, res) => {
+    const sqlget="SELECT id, name, email FROM login"
+    db.query(sqlget, (err, data) => {
+      if (err) {
+        return res.json({ Error: "Fetching data error in server" });
+      }
+      res.json(data);
+    })
+  }
+  const deleteUser = async (req, res) => {
+    const { id } = req.params;
+    const sqlDelete = "DELETE FROM login WHERE id =?";
+    db.query(sqlDelete, [id], (err, result) => {
+      if (err) {
+        console.error("Error deleting data:", err);
+        return res.status(500).json({ message: err.message });
+      }
+      res.status(200).json({ message: "User Deleted successfully" });
+    });
+  }
+module.exports = { signUp, login, logout,getUser, deleteUser };
