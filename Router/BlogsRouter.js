@@ -34,13 +34,6 @@ const upload = multer({
   },
 });
 
-// router.post('/add/:lang',
-//   upload.fields([
-//     { name: 'main_img', maxCount: 1 }, // Main image
-//     { name: 'img', maxCount: 10 } // Assuming a maximum of 10 images for descriptions
-//   ]),
-//   BlogsController.addblogs
-// );
 router.post(
   "/add/:lang",
   upload.fields([
@@ -61,9 +54,12 @@ router.post(
 router.get("/:lang", BlogsController.getblogsByLang);
 router.get("/getbyid/:id", BlogsController.getblogsById);
 router.get("/:lang/getbyid/:id", BlogsController.getblogsByIdAndLang);
-router.get("/:lang/getbyidfront/:id", BlogsController.getblogsByIdAndLangForFront);
+router.get(
+  "/:lang/getbyidfront/:id",
+  BlogsController.getblogsByIdAndLangForFront
+);
 router.get("/", BlogsController.getblogs);
-router.get("/recentblog/:lang", BlogsController.getRecentBlog);
+// router.get("/recentblog/:lang", BlogsController.getRecentBlog);
 // router.put('/update/:lang/:id',upload.fields([{ name: 'img', maxCount: 1 }]), BlogsController.updateblogs);
 router.put(
   "/update/:lang/:id",
@@ -83,6 +79,17 @@ router.put(
   BlogsController.updateblogs
 );
 router.delete("/delete/:lang/:id", BlogsController.deleteblogs);
+// description and img
 router.delete("/deletedescr/:id", BlogsController.deleteDescriptionofBlog);
+router.get("/paragraphs/:id", BlogsController.getDescriptionsandimg);
+router.put("/paragraphs/update/:id", BlogsController.updateDescription);
+router.put(
+  "/paragraphsimg/update/:id",
+  upload.fields([{ name: "img", maxCount: 1 }]),
+  BlogsController.updateImg
+);
+router.delete("/deleteimg/:id", BlogsController.deleteimgblog);
+router.post('/addimgblog/:blog_description_id', upload.fields([
+  { name: "newimg", maxCount: 10 }]), BlogsController.addimgblog)
 
 module.exports = router;
