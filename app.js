@@ -34,6 +34,7 @@ const BlogsRouter = require("./Router/BlogsRouter.js");
 const JobdescriptionRouter = require("./Router/JobDescriptionRouter.js");
 const ContactFormRouter = require("./Router/ContactFormRouter.js");
 const LoginRouter = require("./Router/LoginRouter.js");
+const SubscribeRouter = require("./Router/SubscribeRouter.js");
 const app = express();
 const PORT = process.env.PORT || 3005;
 app.use(express.json());
@@ -92,6 +93,7 @@ app.use("/contactForm", ContactFormRouter);
 app.use("/api", AbuteRouter);
 app.use("/abuteteam", AbuteTeamRouter);
 app.use("/aboutServices", aboutServicesRouter);
+app.use("/subscribe", SubscribeRouter);
 app.get("/", (req, res) => {
   res.send("Welcome to kasselsoft! ");
 });
